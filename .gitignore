@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+data/*.json
+data/generated/
+data/sessions/
+*.log
+.DS_Store
+ssh/*
+!ssh/README.md
+!ssh/*.pub

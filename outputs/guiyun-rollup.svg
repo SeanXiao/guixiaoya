@@ -1,0 +1,241 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="2700" viewBox="0 0 1080 2700">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7fbff"/>
+      <stop offset="0.36" stop-color="#eef9f5"/>
+      <stop offset="1" stop-color="#fff8ea"/>
+    </linearGradient>
+    <linearGradient id="titleBand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0e9f8c"/>
+      <stop offset="0.55" stop-color="#2f80ed"/>
+      <stop offset="1" stop-color="#ffb84d"/>
+    </linearGradient>
+    <linearGradient id="cardGreen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e9fff6"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="cardBlue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef7ff"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="cardGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff5df"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#184b5c" flood-opacity="0.16"/>
+    </filter>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#184b5c" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .font { font-family: "HarmonyOS Sans SC", "Alibaba PuHuiTi", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif; }
+      .title { font-size: 104px; font-weight: 900; letter-spacing: 0; fill: #ffffff; }
+      .subtitle { font-size: 34px; font-weight: 700; fill: #ffffff; }
+      .badge { font-size: 25px; font-weight: 700; fill: #0d5b62; }
+      .section-title { font-size: 38px; font-weight: 900; fill: #0b7d73; }
+      .section-sub { font-size: 24px; font-weight: 700; fill: #45616a; }
+      .body { font-size: 27px; font-weight: 700; fill: #26373d; }
+      .small { font-size: 22px; font-weight: 700; fill: #4c6670; }
+      .tiny { font-size: 18px; font-weight: 700; fill: #58717a; }
+      .white-title { font-size: 30px; font-weight: 900; fill: #ffffff; }
+      .button-text { font-size: 27px; font-weight: 900; fill: #153b43; }
+      .button-small { font-size: 20px; font-weight: 700; fill: #5c7178; }
+      .step-num { font-size: 30px; font-weight: 900; fill: #ffffff; }
+      .step-title { font-size: 25px; font-weight: 900; fill: #173e45; }
+      .step-small { font-size: 18px; font-weight: 700; fill: #60777e; }
+    </style>
+  </defs>
+
+  <rect width="1080" height="2700" fill="url(#bg)"/>
+
+  <!-- decorative Guangxi-inspired background -->
+  <path d="M0,2350 C180,2260 310,2295 460,2215 C620,2130 765,2140 1080,2025 L1080,2700 L0,2700 Z" fill="#d6f2dc"/>
+  <path d="M0,2425 C185,2350 360,2380 520,2305 C670,2235 820,2245 1080,2140 L1080,2700 L0,2700 Z" fill="#9edbb1"/>
+  <path d="M0,2525 C210,2455 385,2480 575,2400 C725,2338 888,2346 1080,2270 L1080,2700 L0,2700 Z" fill="#48a86f"/>
+  <circle cx="962" cy="142" r="62" fill="#ffd166" opacity="0.75"/>
+  <circle cx="130" cy="450" r="70" fill="#ffffff" opacity="0.55"/>
+  <circle cx="870" cy="705" r="92" fill="#ffffff" opacity="0.42"/>
+  <path d="M60,216 C105,166 168,164 208,214 C252,183 315,193 344,242 C278,261 138,265 60,216 Z" fill="#ffffff" opacity="0.64"/>
+  <path d="M716,330 C759,282 827,288 858,336 C895,318 944,331 965,370 C902,386 780,390 716,330 Z" fill="#ffffff" opacity="0.56"/>
+
+  <!-- top hero -->
+  <rect x="54" y="58" width="972" height="365" rx="44" fill="url(#titleBand)" filter="url(#shadow)"/>
+  <path d="M84,360 C190,260 315,283 405,195 C498,103 592,120 686,198 C780,274 900,256 996,168 L996,423 L84,423 Z" fill="#ffffff" opacity="0.12"/>
+  <text class="font title" x="540" y="190" text-anchor="middle">桂韵创想家</text>
+  <text class="font subtitle" x="540" y="255" text-anchor="middle">一句灵感，生成一本会说话的广西非遗 AI 绘本</text>
+  <rect x="304" y="294" width="472" height="58" rx="29" fill="#ffffff" opacity="0.92"/>
+  <text class="font badge" x="540" y="332" text-anchor="middle">小学 AI 创新项目展示</text>
+
+  <!-- robot Gui Xiaoya -->
+  <g transform="translate(90 276)">
+    <rect x="0" y="0" width="196" height="188" rx="36" fill="#ffffff" filter="url(#softShadow)"/>
+    <rect x="42" y="34" width="112" height="80" rx="28" fill="#dff6ff" stroke="#2f80ed" stroke-width="5"/>
+    <circle cx="76" cy="75" r="10" fill="#0b7d73"/>
+    <circle cx="120" cy="75" r="10" fill="#0b7d73"/>
+    <path d="M76,96 Q98,112 120,96" fill="none" stroke="#ff9f1c" stroke-width="6" stroke-linecap="round"/>
+    <line x1="98" y1="34" x2="98" y2="12" stroke="#0b7d73" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="98" cy="8" r="8" fill="#ffca3a"/>
+    <rect x="53" y="128" width="90" height="34" rx="17" fill="#0e9f8c"/>
+    <text class="font" x="98" y="152" text-anchor="middle" font-size="22" font-weight="900" fill="#ffffff">桂小雅</text>
+  </g>
+
+  <!-- card 1: background -->
+  <rect x="66" y="474" width="948" height="368" rx="34" fill="url(#cardGreen)" filter="url(#shadow)"/>
+  <rect x="66" y="474" width="16" height="368" rx="8" fill="#0e9f8c"/>
+  <text class="font section-title" x="110" y="546">一 项目背景：为什么做？</text>
+  <text class="font body" x="110" y="606">广西有美丽山水和丰富非遗文化。</text>
+  <text class="font body" x="110" y="652">很多小朋友知道桂林山水、绣球、铜鼓、壮锦，</text>
+  <text class="font body" x="110" y="698">却不知道怎样把它们讲成自己的故事。</text>
+  <text class="font body" x="110" y="744">我们希望用 AI 帮孩子把家乡文化变成绘本。</text>
+  <text class="font section-sub" x="110" y="794">目标：认识家乡 · 保护非遗 · 敢想敢说敢创作</text>
+  <g transform="translate(744 552)">
+    <path d="M0,160 C45,80 96,88 137,24 C177,84 218,82 270,160 Z" fill="#8ad8c0"/>
+    <path d="M36,160 C78,102 104,110 139,58 C172,111 205,112 238,160 Z" fill="#25a78f"/>
+    <rect x="26" y="166" width="218" height="18" rx="9" fill="#0e9f8c"/>
+    <circle cx="206" cy="42" r="34" fill="#ffd166"/>
+    <circle cx="58" cy="54" r="30" fill="#ff6b6b"/>
+    <path d="M58,24 L66,48 L91,48 L70,62 L78,86 L58,71 L38,86 L46,62 L25,48 L50,48 Z" fill="#ffffff"/>
+    <circle cx="176" cy="100" r="35" fill="#f5c15d" stroke="#a56523" stroke-width="6"/>
+    <circle cx="176" cy="100" r="19" fill="none" stroke="#a56523" stroke-width="5"/>
+  </g>
+
+  <!-- card 2: idea and process -->
+  <rect x="66" y="884" width="948" height="640" rx="34" fill="url(#cardBlue)" filter="url(#shadow)"/>
+  <rect x="66" y="884" width="16" height="640" rx="8" fill="#2f80ed"/>
+  <text class="font section-title" x="110" y="956">二 创作思路：从灵感到绘本</text>
+  <rect x="110" y="998" width="860" height="96" rx="28" fill="#ffffff" stroke="#bfe3ff" stroke-width="3"/>
+  <text class="font body" x="150" y="1058">小朋友说：“我想写一个广西非遗故事！”</text>
+  <text class="font small" x="150" y="1088">AI 创作伙伴“桂小雅”帮助生成故事、插图和朗读。</text>
+
+  <!-- workflow -->
+  <g transform="translate(134 1138)">
+    <line x1="48" y1="48" x2="48" y2="287" stroke="#c8dbe1" stroke-width="7" stroke-linecap="round"/>
+    <g>
+      <circle cx="48" cy="48" r="34" fill="#0e9f8c"/>
+      <text class="font step-num" x="48" y="59" text-anchor="middle">1</text>
+      <rect x="104" y="10" width="728" height="76" rx="22" fill="#ffffff" stroke="#86d8c6" stroke-width="3"/>
+      <text class="font step-title" x="144" y="43">说出灵感</text>
+      <text class="font step-small" x="144" y="68">一句话开始：我想写一个广西非遗故事</text>
+    </g>
+    <g transform="translate(0 80)">
+      <circle cx="48" cy="48" r="34" fill="#2f80ed"/>
+      <text class="font step-num" x="48" y="59" text-anchor="middle">2</text>
+      <rect x="104" y="10" width="728" height="76" rx="22" fill="#ffffff" stroke="#bfe3ff" stroke-width="3"/>
+      <text class="font step-title" x="144" y="43">选择主角和语言</text>
+      <text class="font step-small" x="144" y="68">选择女孩 / 男孩，中文 / 英文</text>
+    </g>
+    <g transform="translate(0 160)">
+      <circle cx="48" cy="48" r="34" fill="#ffb84d"/>
+      <text class="font step-num" x="48" y="59" text-anchor="middle">3</text>
+      <rect x="104" y="10" width="728" height="76" rx="22" fill="#ffffff" stroke="#ffe0a6" stroke-width="3"/>
+      <text class="font step-title" x="144" y="43">AI 生成 4 页故事</text>
+      <text class="font step-small" x="144" y="68">标题、正文、文化小百科一起生成</text>
+    </g>
+    <g transform="translate(0 240)">
+      <circle cx="48" cy="48" r="34" fill="#ff6b6b"/>
+      <text class="font step-num" x="48" y="59" text-anchor="middle">4</text>
+      <rect x="104" y="10" width="728" height="76" rx="22" fill="#ffffff" stroke="#ffc7c7" stroke-width="3"/>
+      <text class="font step-title" x="144" y="43">AI 画出绘本插图</text>
+      <text class="font step-small" x="144" y="68">每一页都有自己的广西文化画面</text>
+    </g>
+    <g transform="translate(0 320)">
+      <circle cx="48" cy="48" r="34" fill="#845ec2"/>
+      <text class="font step-num" x="48" y="59" text-anchor="middle">5</text>
+      <rect x="104" y="10" width="728" height="76" rx="22" fill="#ffffff" stroke="#dcc8ff" stroke-width="3"/>
+      <text class="font step-title" x="144" y="43">绘本剧场朗读分享</text>
+      <text class="font step-small" x="144" y="68">保存到我的书架，查看创作记录</text>
+    </g>
+  </g>
+
+  <!-- card 3: menu -->
+  <rect x="66" y="1566" width="948" height="548" rx="34" fill="url(#cardGold)" filter="url(#shadow)"/>
+  <rect x="66" y="1566" width="16" height="548" rx="8" fill="#ffb84d"/>
+  <text class="font section-title" x="110" y="1638">三 功能 Menu 导航</text>
+  <text class="font section-sub" x="110" y="1684">像打开一个创作工具箱，孩子可以一步步完成绘本。</text>
+
+  <g transform="translate(112 1728)">
+    <g>
+      <rect x="0" y="0" width="260" height="132" rx="24" fill="#ffffff" stroke="#d9eee8" stroke-width="3" filter="url(#softShadow)"/>
+      <circle cx="48" cy="46" r="26" fill="#dff8ef"/>
+      <text class="font" x="48" y="56" text-anchor="middle" font-size="30">✎</text>
+      <text class="font button-text" x="92" y="48">创作书桌</text>
+      <text class="font button-small" x="92" y="86">输入灵感</text>
+    </g>
+    <g transform="translate(300 0)">
+      <rect x="0" y="0" width="260" height="132" rx="24" fill="#ffffff" stroke="#d9eee8" stroke-width="3" filter="url(#softShadow)"/>
+      <circle cx="48" cy="46" r="26" fill="#fff1c7"/>
+      <text class="font" x="48" y="57" text-anchor="middle" font-size="32">★</text>
+      <text class="font button-text" x="92" y="48">灵感锦囊</text>
+      <text class="font button-small" x="92" y="86">获得提示</text>
+    </g>
+    <g transform="translate(600 0)">
+      <rect x="0" y="0" width="260" height="132" rx="24" fill="#ffffff" stroke="#d9eee8" stroke-width="3" filter="url(#softShadow)"/>
+      <circle cx="48" cy="46" r="26" fill="#e5efff"/>
+      <text class="font" x="48" y="56" text-anchor="middle" font-size="30">▣</text>
+      <text class="font button-text" x="92" y="48">我的书架</text>
+      <text class="font button-small" x="92" y="86">保存作品</text>
+    </g>
+    <g transform="translate(0 166)">
+      <rect x="0" y="0" width="260" height="132" rx="24" fill="#ffffff" stroke="#d9eee8" stroke-width="3" filter="url(#softShadow)"/>
+      <circle cx="48" cy="46" r="26" fill="#ffe6e6"/>
+      <text class="font" x="48" y="56" text-anchor="middle" font-size="30">本</text>
+      <text class="font button-text" x="92" y="48">绘本详情</text>
+      <text class="font button-small" x="92" y="86">阅读故事</text>
+    </g>
+    <g transform="translate(300 166)">
+      <rect x="0" y="0" width="260" height="132" rx="24" fill="#ffffff" stroke="#d9eee8" stroke-width="3" filter="url(#softShadow)"/>
+      <circle cx="48" cy="46" r="26" fill="#eee4ff"/>
+      <text class="font" x="48" y="56" text-anchor="middle" font-size="30">▶</text>
+      <text class="font button-text" x="92" y="48">绘本剧场</text>
+      <text class="font button-small" x="92" y="86">朗读分享</text>
+    </g>
+    <g transform="translate(600 166)">
+      <rect x="0" y="0" width="260" height="132" rx="24" fill="#ffffff" stroke="#d9eee8" stroke-width="3" filter="url(#softShadow)"/>
+      <circle cx="48" cy="46" r="26" fill="#e9f7ff"/>
+      <text class="font" x="48" y="55" text-anchor="middle" font-size="28">记</text>
+      <text class="font button-text" x="92" y="48">创作记录</text>
+      <text class="font button-small" x="92" y="86">看到过程</text>
+    </g>
+  </g>
+
+  <!-- card 4: innovation -->
+  <rect x="66" y="2150" width="948" height="220" rx="34" fill="#ffffff" filter="url(#shadow)"/>
+  <rect x="66" y="2150" width="16" height="220" rx="8" fill="#0e9f8c"/>
+  <text class="font section-title" x="110" y="2220">四 创新与展望</text>
+  <text class="font body" x="110" y="2280">把广西非遗、儿童表达和 AI 创作结合起来，</text>
+  <text class="font body" x="110" y="2326">让孩子从“会使用 AI”走向“会表达家乡文化”。</text>
+  <text class="font small" x="110" y="2362">未来：更多文化主题 · 班级作品墙 · 亲子共创</text>
+
+  <!-- clean bottom value block, no fake photos -->
+  <g transform="translate(66 2534)">
+    <rect x="0" y="0" width="948" height="118" rx="34" fill="#123c43" opacity="0.94"/>
+    <text class="font white-title" x="474" y="49" text-anchor="middle">项目价值</text>
+    <text class="font" x="474" y="92" text-anchor="middle" font-size="30" font-weight="900" fill="#ffffff">把广西文化变成孩子自己的故事</text>
+  </g>
+
+  <g transform="translate(104 2402)">
+    <g>
+      <rect x="0" y="0" width="250" height="112" rx="28" fill="#ffffff" stroke="#0e9f8c" stroke-width="4" filter="url(#softShadow)"/>
+      <circle cx="58" cy="56" r="34" fill="#e6fff4"/>
+      <path d="M46,55 C46,41 56,33 68,39 C82,46 75,68 58,79 C42,68 34,46 46,55 Z" fill="#0e9f8c"/>
+      <text class="font" x="120" y="50" font-size="27" font-weight="900" fill="#173e45">文化传承</text>
+      <text class="font" x="120" y="82" font-size="19" font-weight="800" fill="#60777e">认识广西非遗</text>
+    </g>
+    <g transform="translate(311 0)">
+      <rect x="0" y="0" width="250" height="112" rx="28" fill="#ffffff" stroke="#2f80ed" stroke-width="4" filter="url(#softShadow)"/>
+      <circle cx="58" cy="56" r="34" fill="#eaf4ff"/>
+      <path d="M48,74 L48,42 Q58,30 68,42 L68,74 Z" fill="#2f80ed"/>
+      <path d="M84,43 L102,35 L102,77 L84,69 Z" fill="#ffb84d"/>
+      <text class="font" x="120" y="50" font-size="27" font-weight="900" fill="#173e45">表达训练</text>
+      <text class="font" x="120" y="82" font-size="19" font-weight="800" fill="#60777e">敢说敢分享</text>
+    </g>
+    <g transform="translate(622 0)">
+      <rect x="0" y="0" width="250" height="112" rx="28" fill="#ffffff" stroke="#ffb84d" stroke-width="4" filter="url(#softShadow)"/>
+      <circle cx="58" cy="56" r="34" fill="#fff3d7"/>
+      <path d="M58,28 L66,49 L89,49 L70,62 L77,84 L58,70 L39,84 L46,62 L27,49 L50,49 Z" fill="#ffb84d"/>
+      <text class="font" x="120" y="50" font-size="27" font-weight="900" fill="#173e45">AI 创作</text>
+      <text class="font" x="120" y="82" font-size="19" font-weight="800" fill="#60777e">故事插图朗读</text>
+    </g>
+  </g>
+</svg>
