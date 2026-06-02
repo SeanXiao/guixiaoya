@@ -403,6 +403,10 @@ app.post("/api/chat", async (request, response, next) => {
   }
 });
 
+app.use("/api", (_request, response) => {
+  response.status(404).json({ error: "not found" });
+});
+
 // SPA fallback — must be AFTER all API routes so it only catches non-API requests
 if (spaHtml) {
   app.get("/", (_req, res) => res.status(200).type("html").send(spaHtml));

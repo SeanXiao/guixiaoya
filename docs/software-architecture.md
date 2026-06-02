@@ -11,10 +11,10 @@
 | 层级 | 技术 | 作用 |
 |---|---|---|
 | 前端框架 | React 19 + TypeScript | 构建创作书桌、绘本展示、绘本剧场和交互状态 |
-| 构建工具 | Vite 7 | 本地开发服务器、前端构建、API 代理 |
+| 构建工具 | Vite 7 | 构建前端静态资源，旧的双端口调试模式下提供开发服务器和 API 代理 |
 | UI 图标 | lucide-react | 麦克风、朗读、书本、删除、进度等图标 |
 | 后端框架 | Express 5 + TypeScript | 提供 AI 调用、数据保存、图片/音频资源服务 |
-| 运行工具 | tsx + concurrently | 同时运行 Vite 前端和 Express 后端 |
+| 运行工具 | tsx + Vite build | 默认单端口启动：先构建前端，再由 Express 同时提供页面和 API |
 | 本地存储 | JSON 文件 | 保存记忆、transaction、绘本作品、生成资源 |
 | 普通聊天模型 | MiniMax OpenAI 兼容接口 | 小圆陪伴式聊天 |
 | 普通 TTS | MiniMax `t2a_v2` | 聊天回复语音合成 |
@@ -51,7 +51,7 @@
 │   ├── guiyun-creative-requirements.md
 │   ├── kid-ai-conversation-0-to-1.md
 │   └── software-architecture.md
-├── vite.config.ts               # Vite 配置和 API 代理
+├── vite.config.ts               # Vite 配置，主要用于构建和旧双端口调试代理
 ├── package.json
 └── .env.example
 ```
@@ -109,9 +109,19 @@ flowchart LR
 | `PictureBookPlayer` | 独立绘本剧场，支持逐页翻页、朗读全书、朗读单页 |
 | `speakWithBrowser` | 优先播放服务端音频，失败时使用浏览器语音合成 |
 
+## 单端口运行模型
+
+当前项目默认使用单端口模式运行。`npm run dev` 会先执行前端构建，把 React 应用输出到 `dist/`，然后启动 Express 服务。Express 监听 `127.0.0.1:8787`，同时负责三类请求：
+
+- `/` 和前端路由：返回 `dist/index.html`。
+- `/assets/...`：返回前端构建后的 JS、CSS 和图片资源。
+- `/api/...` 与 `/generated/...`：返回后端接口、本地生成图片和朗读音频。
+
+浏览器只需要访问 `http://127.0.0.1:8787`。旧的 `5173 + 8787` 双端口方式只保留为 `npm run dev:split`，用于临时调试 Vite 开发服务器。
+
 ## 后端 API
 
-Express 服务运行在 `127.0.0.1:8787`，Vite 通过 `vite.config.ts` 把 `/api` 和 `/generated` 代理到后端。
+Express 服务运行在 `127.0.0.1:8787`。在默认单端口模式下，页面、`/api` 接口和 `/generated` 资源都由这个服务提供；`vite.config.ts` 里的代理只用于 `npm run dev:split` 备用调试模式。
 
 | 方法 | 路径 | 作用 |
 |---|---|---|
@@ -280,7 +290,7 @@ npm install
 
 创建 `.env`，参考 `.env.example` 填入 MiniMax 和百炼 key。
 
-启动开发环境：
+启动单端口环境：
 
 ```bash
 npm run dev
@@ -289,10 +299,18 @@ npm run dev
 访问：
 
 ```text
-http://127.0.0.1:5173
+http://127.0.0.1:8787
 ```
 
-构建：
+`npm run dev` 会先构建前端，再启动 Express。单端口模式下不需要单独打开 Vite 的 `5173` 端口。
+
+仅在需要旧的前后端分离调试方式时运行：
+
+```bash
+npm run dev:split
+```
+
+手动构建：
 
 ```bash
 npm run build
@@ -317,4 +335,3 @@ npm run build
 - 增加上传手绘图，再由 AI 改成绘本风格。
 - 增加广西文化知识库检索，减少模型幻觉。
 - 增加比赛演示模式，一键播放完整讲解流程。
-

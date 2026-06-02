@@ -1,9 +1,11 @@
 #!/bin/bash
-cd /Users/sean/Desktop/guixiaoya
+set -euo pipefail
+
+cd "$(dirname "$0")"
 
 # 构建前端
 echo "📦 构建前端..."
-npm run build -- --outDir /tmp/guixiaoya-dist --emptyOutDir
+npm run build
 
 # 启动单服务
 echo "🚀 启动桂小雅（单服务模式）"
