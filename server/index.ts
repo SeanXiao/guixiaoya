@@ -39,14 +39,13 @@ const rootDir = dirname(dirname(fileURLToPath(import.meta.url)));
 app.use(express.json({ limit: "1mb" }));
 app.use("/generated", express.static(join(rootDir, "data", "generated")));
 
-// Serve built frontend when available (single-service mode, STATIC_DIR points to build output)
+// Static dir config saved for later (SPA fallback must come AFTER all API routes)
 const staticDir = process.env.STATIC_DIR || join(rootDir, "dist");
+let spaHtml: string | null = null;
 try {
   if (readFileSync(join(staticDir, "index.html"), "utf-8")) {
     app.use("/assets", express.static(join(staticDir, "assets")));
-    const spaHtml = readFileSync(join(staticDir, "index.html"), "utf-8");
-    app.get("/", (_req, res) => res.status(200).type("html").send(spaHtml));
-    app.get("/{*any}", (_req, res) => res.status(200).type("html").send(spaHtml));
+    spaHtml = readFileSync(join(staticDir, "index.html"), "utf-8");
     console.log(`Static files served from ${staticDir}`);
   }
 } catch { /* static dir not found, skip (API-only mode) */ }
@@ -404,8 +403,24 @@ app.post("/api/chat", async (request, response, next) => {
   }
 });
 
+// SPA fallback — must be AFTER all API routes so it only catches non-API requests
+if (spaHtml) {
+  app.get("/", (_req, res) => res.status(200).type("html").send(spaHtml));
+  app.get("/{*any}", (_req, res) => res.status(200).type("html").send(spaHtml));
+}
+
+// Prevent silent crashes from unhandled rejections
+process.on("unhandledRejection", (reason) => {
+  console.error("Unhandled Rejection:", reason instanceof Error ? reason.message : reason);
+});
+
+process.on("uncaughtException", (error) => {
+  console.error("Uncaught Exception:", error.message);
+});
+
 app.use((error: unknown, _request: express.Request, response: express.Response, _next: express.NextFunction) => {
   const message = error instanceof Error ? error.message : "Unknown server error";
+  console.error("API Error:", message);
   response.status(500).json({ error: message });
 });
 
