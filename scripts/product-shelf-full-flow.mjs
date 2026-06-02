@@ -2,7 +2,7 @@ import { spawn } from "node:child_process";
 import { writeFile } from "node:fs/promises";
 import { WebSocket } from "ws";
 
-const appUrl = process.env.PRODUCT_SHELF_URL || "http://127.0.0.1:5173/";
+const appUrl = process.env.PRODUCT_SHELF_URL || "http://127.0.0.1:8787/";
 const apiUrl = process.env.PRODUCT_SHELF_API_URL || "http://127.0.0.1:8787";
 const chromePath = process.env.CHROME_PATH || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const port = Number(process.env.PRODUCT_SHELF_CDP_PORT || 9360);

@@ -7,6 +7,8 @@ data/*.json
 data/generated/
 data/sessions/
 *.log
+.run/
+logs/
 .DS_Store
 ssh/*
 !ssh/README.md

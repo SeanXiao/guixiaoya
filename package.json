@@ -1,11 +1,16 @@
 {
-  "name": "xiaoyuan-ai-companion",
+  "name": "guiyun-creative-picture-book",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "npm run build && npm run api",
     "start": "npm run build && npm run api",
+    "workbuddy": "./start.sh start",
+    "workbuddy:stop": "./start.sh stop",
+    "workbuddy:restart": "./start.sh restart",
+    "workbuddy:status": "./start.sh status",
+    "workbuddy:logs": "./start.sh logs",
     "dev:split": "concurrently -n web,api -c cyan,green \"vite --host 127.0.0.1 --port 5173\" \"tsx watch server/index.ts\"",
     "build": "tsc && vite build",
     "test:product-full-flow": "node scripts/product-shelf-full-flow.mjs",
