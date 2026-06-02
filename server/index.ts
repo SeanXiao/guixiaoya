@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express from "express";
+import { createReadStream, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -37,6 +38,18 @@ const rootDir = dirname(dirname(fileURLToPath(import.meta.url)));
 
 app.use(express.json({ limit: "1mb" }));
 app.use("/generated", express.static(join(rootDir, "data", "generated")));
+
+// Serve built frontend when available (single-service mode, STATIC_DIR points to build output)
+const staticDir = process.env.STATIC_DIR || join(rootDir, "dist");
+try {
+  if (readFileSync(join(staticDir, "index.html"), "utf-8")) {
+    app.use("/assets", express.static(join(staticDir, "assets")));
+    const spaHtml = readFileSync(join(staticDir, "index.html"), "utf-8");
+    app.get("/", (_req, res) => res.status(200).type("html").send(spaHtml));
+    app.get("/{*any}", (_req, res) => res.status(200).type("html").send(spaHtml));
+    console.log(`Static files served from ${staticDir}`);
+  }
+} catch { /* static dir not found, skip (API-only mode) */ }
 
 function cleanSpeechPart(text: string) {
   return text
