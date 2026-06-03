@@ -266,6 +266,19 @@ async function main() {
     });
     await client.waitFor(() => Boolean(document.querySelector(".confirm-dialog")));
     await client.evaluate(() => {
+      const input = document.querySelector("#delete-book-password");
+      const valueSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set;
+      if (input instanceof HTMLInputElement && valueSetter) {
+        valueSetter.call(input, "12345678");
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+      return true;
+    });
+    await client.waitFor(() => {
+      const deleteButton = [...document.querySelectorAll(".confirm-actions button")].find((button) => button.textContent.includes("删除"));
+      return deleteButton instanceof HTMLButtonElement && !deleteButton.disabled;
+    });
+    await client.evaluate(() => {
       [...document.querySelectorAll(".confirm-actions button")].find((button) => button.textContent.includes("删除"))?.click();
       return true;
     });
@@ -297,7 +310,11 @@ async function main() {
     }, null, 2));
   } finally {
     if (generatedBookId) {
-      await fetch(`${apiUrl}/api/picture-books/${encodeURIComponent(generatedBookId)}`, { method: "DELETE" }).catch(() => {});
+      await fetch(`${apiUrl}/api/picture-books/${encodeURIComponent(generatedBookId)}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ deletePassword: "12345678" })
+      }).catch(() => {});
     }
     client?.close();
     chrome.kill("SIGTERM");

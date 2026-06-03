@@ -80,8 +80,12 @@ export async function preloadPictureBookSpeech(bookId: string) {
   };
 }
 
-export async function deletePictureBook(id: string) {
-  const response = await fetch(`/api/picture-books/${encodeURIComponent(id)}`, { method: "DELETE" });
+export async function deletePictureBook(id: string, deletePassword: string) {
+  const response = await fetch(`/api/picture-books/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ deletePassword })
+  });
   const data = await readJson<BookListResponse>(response);
   return data.books || [];
 }

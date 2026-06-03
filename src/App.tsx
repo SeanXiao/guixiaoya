@@ -1044,14 +1044,33 @@ export default function App({ embeddedInProduct = false }: { embeddedInProduct?:
   }
 
   async function deleteBook(id: string) {
-    const response = await fetch(`/api/picture-books/${encodeURIComponent(id)}`, { method: "DELETE" });
-    const data = await readApiJson<{ books?: PictureBookSummary[] }>(response, "绘本删除失败");
-    setBooks(data.books || []);
-    if (activeBook?.id === id) {
-      setActiveBook(null);
+    const deletePassword = window.prompt("请输入删除密码");
+    if (deletePassword === null) {
+      return;
     }
-    setGenerationProgress(null);
-    setNotice("绘本已从书架移走");
+    const password = deletePassword.trim();
+    if (!password) {
+      setNotice("请输入删除密码后再删除绘本");
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/picture-books/${encodeURIComponent(id)}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ deletePassword: password })
+      });
+      const data = await readApiJson<{ books?: PictureBookSummary[] }>(response, "绘本删除失败");
+      setBooks(data.books || []);
+      if (activeBook?.id === id) {
+        setActiveBook(null);
+      }
+      setGenerationProgress(null);
+      setNotice("绘本已从书架移走");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "绘本删除失败";
+      setNotice(`删除失败：${message}`);
+    }
   }
 
   function pickInspiration(chip: string) {

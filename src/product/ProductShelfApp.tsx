@@ -302,6 +302,8 @@ export default function ProductShelfApp() {
   const [, setNotice] = useState("");
   const [progress, setProgress] = useState<ProductProgress | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<PictureBookSummary | null>(null);
+  const [deletePassword, setDeletePassword] = useState("");
+  const [deletePasswordError, setDeletePasswordError] = useState("");
   const [pageIndex, setPageIndex] = useState(0);
   const [readingMode, setReadingMode] = useState<ReadingMode>("idle");
   const [readingPageNumber, setReadingPageNumber] = useState<number | null>(null);
@@ -636,18 +638,33 @@ export default function ProductShelfApp() {
 
   function requestDeleteBook(book: PictureBookSummary) {
     setDeleteTarget(book);
+    setDeletePassword("");
+    setDeletePasswordError("");
     setNotice(`请确认是否删除《${displayText(book.title)}》。`);
+  }
+
+  function cancelDeleteBook() {
+    setDeleteTarget(null);
+    setDeletePassword("");
+    setDeletePasswordError("");
   }
 
   async function confirmDeleteBook() {
     if (!deleteTarget) {
       return;
     }
+    const password = deletePassword.trim();
+    if (!password) {
+      setDeletePasswordError("请输入删除密码。");
+      return;
+    }
 
     const target = deleteTarget;
-    setDeleteTarget(null);
     try {
-      const nextBooks = await deletePictureBook(target.id);
+      const nextBooks = await deletePictureBook(target.id, password);
+      setDeleteTarget(null);
+      setDeletePassword("");
+      setDeletePasswordError("");
       setBooks(nextBooks);
       if (activeBook?.id === target.id) {
         const nextActiveBook = nextBooks[0];
@@ -662,6 +679,7 @@ export default function ProductShelfApp() {
       setNotice(`《${displayText(target.title)}》已从${bookshelfTitle}移走。`);
     } catch (error) {
       const message = error instanceof Error ? error.message : "删除失败";
+      setDeletePasswordError(message);
       setNotice(`删除失败：${message}`);
     }
   }
@@ -980,7 +998,7 @@ export default function ProductShelfApp() {
       ) : null}
 
       {deleteTarget ? (
-        <div className="confirm-overlay" role="presentation" onClick={() => setDeleteTarget(null)}>
+        <div className="confirm-overlay" role="presentation" onClick={cancelDeleteBook}>
           <section className="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="delete-book-title" onClick={(event) => event.stopPropagation()}>
             <div className="confirm-icon" aria-hidden="true">
               <AlertCircle size={24} />
@@ -990,11 +1008,36 @@ export default function ProductShelfApp() {
               <h2 id="delete-book-title">确定删除《{displayText(deleteTarget.title)}》吗？</h2>
               <p>删除后会从“{bookshelfTitle}”移走这本作品，不能在页面里恢复。</p>
             </div>
+            <label className="delete-password-field" htmlFor="delete-book-password">
+              <span>删除密码</span>
+              <input
+                id="delete-book-password"
+                type="password"
+                value={deletePassword}
+                autoComplete="off"
+                onChange={(event) => {
+                  setDeletePassword(event.target.value);
+                  setDeletePasswordError("");
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    void confirmDeleteBook();
+                  }
+                }}
+                placeholder="请输入删除密码"
+              />
+            </label>
+            {deletePasswordError ? (
+              <p className="delete-password-error" role="alert">
+                {deletePasswordError}
+              </p>
+            ) : null}
             <div className="confirm-actions">
-              <button className="soft-button" type="button" onClick={() => setDeleteTarget(null)}>
+              <button className="soft-button" type="button" onClick={cancelDeleteBook}>
                 取消
               </button>
-              <button className="danger-button" type="button" onClick={() => void confirmDeleteBook()}>
+              <button className="danger-button" type="button" onClick={() => void confirmDeleteBook()} disabled={!deletePassword.trim()}>
                 <Trash2 size={17} />
                 删除
               </button>

@@ -26,6 +26,7 @@ const app = express();
 const port = Number.parseInt(process.env.PORT || "8787", 10);
 const host = process.env.HOST || "127.0.0.1";
 const rootDir = dirname(dirname(fileURLToPath(import.meta.url)));
+const pictureBookDeletePassword = process.env.PICTURE_BOOK_DELETE_PASSWORD || "12345678";
 
 if (!Number.isInteger(port) || port <= 0 || port > 65535) {
   throw new Error(`Invalid PORT value: ${process.env.PORT}`);
@@ -52,6 +53,15 @@ function cleanSpeechPart(text: string) {
     .replace(/\s+/gu, " ")
     .trim()
     .replace(/[。！？!?.,，、；;：:]+$/gu, "");
+}
+
+function readDeletePassword(body: unknown) {
+  if (!body || typeof body !== "object" || !("deletePassword" in body)) {
+    return "";
+  }
+
+  const value = (body as { deletePassword?: unknown }).deletePassword;
+  return typeof value === "string" ? value : "";
 }
 
 function buildPageSpeechText(book: PictureBook, page: PictureBookPage, includeCultureNote = true) {
@@ -285,6 +295,11 @@ app.post("/api/picture-books/:id/pages/:pageNumber/image", async (request, respo
 
 app.delete("/api/picture-books/:id", async (request, response, next) => {
   try {
+    if (readDeletePassword(request.body) !== pictureBookDeletePassword) {
+      response.status(403).json({ error: "删除密码错误" });
+      return;
+    }
+
     const deleted = await deleteBook(request.params.id);
     response.json({ ok: true, deleted, books: await listBookSummaries() });
   } catch (error) {

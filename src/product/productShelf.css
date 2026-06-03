@@ -1835,6 +1835,38 @@
   font-weight: 850;
 }
 
+.delete-password-field {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 7px;
+  color: #243d36;
+  font-size: 0.88rem;
+  font-weight: 950;
+}
+
+.delete-password-field input {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid rgba(170, 69, 47, 0.22);
+  border-radius: 14px;
+  padding: 0 12px;
+  color: #243d36;
+  background: #fffaf0;
+  font: inherit;
+}
+
+.delete-password-field input:focus {
+  outline: 3px solid rgba(242, 191, 69, 0.34);
+  border-color: rgba(170, 69, 47, 0.44);
+}
+
+.delete-password-error {
+  grid-column: 1 / -1;
+  color: #aa452f;
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
 .confirm-actions {
   grid-column: 1 / -1;
   display: flex;
