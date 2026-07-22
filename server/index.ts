@@ -11,6 +11,7 @@ import {
   getBailianRuntimeStatus
 } from "./bailian.js";
 import { getBailianTtsVoice, synthesizeBailianSpeech } from "./bailianTts.js";
+import { createPictureBookPdf } from "./pictureBookPdf.js";
 import {
   deleteBook,
   getBook,
@@ -207,6 +208,28 @@ app.get("/api/picture-books/:id", async (request, response, next) => {
       return;
     }
     response.json({ book });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/picture-books/:id/pdf", async (request, response, next) => {
+  try {
+    const book = await getBook(request.params.id);
+    if (!book) {
+      response.status(404).json({ error: "picture book not found" });
+      return;
+    }
+
+    const pdf = await createPictureBookPdf(book);
+    const encodedTitle = encodeURIComponent(`${book.title || "picture-book"}-绘本封面版.pdf`);
+    response.setHeader("Content-Type", "application/pdf");
+    response.setHeader("Content-Length", String(pdf.length));
+    response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+    response.setHeader("Pragma", "no-cache");
+    response.setHeader("Expires", "0");
+    response.setHeader("Content-Disposition", `attachment; filename="picture-book-${book.id}.pdf"; filename*=UTF-8''${encodedTitle}`);
+    response.send(pdf);
   } catch (error) {
     next(error);
   }

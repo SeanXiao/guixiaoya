@@ -6,6 +6,7 @@ import {
   Clock,
   Compass,
   Cpu,
+  Download,
   Edit3,
   ExternalLink,
   FileText,
@@ -1512,6 +1513,15 @@ function ReaderWorkspace({
             <FileText size={17} />
             创作记录
           </button>
+          <a
+            className="soft-button export-book-button"
+            href={`/api/picture-books/${encodeURIComponent(activeBook.id)}/pdf?v=full-bleed-cover-v5`}
+            download
+            title="下载 A4 横版绘本 PDF，共 5 页"
+          >
+            <Download size={17} />
+            下载 PDF
+          </a>
           <button className="strong-button" type="button" onClick={() => onSetView("theater")}>
             <ExternalLink size={17} />
             进入剧场

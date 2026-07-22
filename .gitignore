@@ -9,6 +9,7 @@ data/sessions/
 *.log
 .run/
 logs/
+output/
 .DS_Store
 ssh/*
 !ssh/README.md
