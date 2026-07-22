@@ -1515,7 +1515,7 @@ function ReaderWorkspace({
           </button>
           <a
             className="soft-button export-book-button"
-            href={`/api/picture-books/${encodeURIComponent(activeBook.id)}/pdf?v=full-bleed-cover-v5`}
+            href={`/api/picture-books/${encodeURIComponent(activeBook.id)}/pdf?v=storybook-pages-v6`}
             download
             title="下载 A4 横版绘本 PDF，共 5 页"
           >

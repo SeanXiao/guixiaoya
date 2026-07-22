@@ -222,7 +222,7 @@ app.get("/api/picture-books/:id/pdf", async (request, response, next) => {
     }
 
     const pdf = await createPictureBookPdf(book);
-    const encodedTitle = encodeURIComponent(`${book.title || "picture-book"}-绘本封面版.pdf`);
+    const encodedTitle = encodeURIComponent(`${book.title || "picture-book"}-A4绘本版.pdf`);
     response.setHeader("Content-Type", "application/pdf");
     response.setHeader("Content-Length", String(pdf.length));
     response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");

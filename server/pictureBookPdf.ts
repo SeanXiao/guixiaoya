@@ -113,16 +113,6 @@ async function readImageSource(imageUrl = "") {
   return null;
 }
 
-async function prepareImage(imageUrl: string, width: number, height: number, fit: "cover" | "contain") {
-  const source = await readImageSource(imageUrl);
-  return sharp(source || placeholderSvg(width, height))
-    .rotate()
-    .resize({ width, height, fit, position: "centre", background: "#fffaf0" })
-    .flatten({ background: "#fffaf0" })
-    .jpeg({ quality: 90, chromaSubsampling: "4:4:4" })
-    .toBuffer();
-}
-
 async function prepareCoverBackground(imageUrl: string) {
   const source = await readImageSource(imageUrl);
   return sharp(source || placeholderSvg(pageWidth, pageHeight))
@@ -157,6 +147,43 @@ async function prepareCoverHero(imageUrl: string, width: number, height: number)
     </svg>
   `);
   return sharp(hero).composite([{ input: mask, blend: "dest-in" }]).png().toBuffer();
+}
+
+async function prepareStoryBackdrop(imageUrl: string) {
+  const source = await readImageSource(imageUrl);
+  return sharp(source || placeholderSvg(pageWidth, pageHeight))
+    .rotate()
+    .trim({ background: "#ffffff", threshold: 12 })
+    .resize({ width: pageWidth, height: pageHeight, fit: "cover", position: "attention" })
+    .blur(20)
+    .modulate({ brightness: 0.92, saturation: 0.72 })
+    .flatten({ background: "#f2eadc" })
+    .jpeg({ quality: 88, chromaSubsampling: "4:4:4" })
+    .toBuffer();
+}
+
+async function prepareStoryIllustration(imageUrl: string, width: number, height: number) {
+  const source = await readImageSource(imageUrl);
+  const illustration = await sharp(source || placeholderSvg(width, height))
+    .rotate()
+    .trim({ background: "#ffffff", threshold: 12 })
+    .resize({ width, height, fit: "cover", position: "attention" })
+    .png()
+    .toBuffer();
+  const mask = Buffer.from(`
+    <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
+      <defs>
+        <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#ffffff" stop-opacity="1"/>
+          <stop offset="0.72" stop-color="#ffffff" stop-opacity="1"/>
+          <stop offset="0.9" stop-color="#ffffff" stop-opacity="0.55"/>
+          <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <rect width="${width}" height="${height}" fill="url(#fade)"/>
+    </svg>
+  `);
+  return sharp(illustration).composite([{ input: mask, blend: "dest-in" }]).png().toBuffer();
 }
 
 async function renderCover(book: PictureBook) {
@@ -209,41 +236,75 @@ async function renderCover(book: PictureBook) {
 }
 
 async function renderStoryPage(book: PictureBook, page: PictureBookPage) {
-  const imageLeft = 70;
-  const imageTop = 80;
-  const imageWidth = 900;
-  const imageHeight = 1080;
-  const copyX = 1060;
-  const storyImage = await prepareImage(page.imageUrl, imageWidth, imageHeight, "contain");
-  const titleLines = wrapText(page.title, 18, 2);
-  const storyLines = wrapText(page.text, 23, 13);
-  const cultureLines = wrapText(page.cultureNote, 27, 5);
-  const titleY = 205;
-  const storyY = titleY + titleLines.length * 62 + 38;
-  const cultureY = storyY + storyLines.length * 42 + 42;
-  const cultureHeight = Math.max(150, 82 + cultureLines.length * 35);
+  const illustrationWidth = 1140;
+  const copyX = 1112;
+  const backdrop = await prepareStoryBackdrop(page.imageUrl);
+  const storyImage = await prepareStoryIllustration(page.imageUrl, illustrationWidth, pageHeight);
+  const titleLines = wrapText(page.title, 17, 2);
+  const storyLines = wrapText(page.text, 21, 12);
+  const cultureLines = wrapText(page.cultureNote, 24, 4);
+  const titleY = 245;
+  const storyY = titleY + titleLines.length * 64 + 38;
+  const storyLineHeight = storyLines.length >= 11 ? 37 : 41;
+  const storyFontSize = storyLines.length >= 11 ? 24 : 26;
+  const cultureY = 868;
+  const cultureHeight = 96 + cultureLines.length * 33;
   const cultureLabel = (book.language || "zh") === "en" ? "Guangxi Culture" : "广西文化小百科";
-  const background = Buffer.from(`
+  const pageWords = ["一", "二", "三", "四"];
+  const pageMarker = (book.language || "zh") === "en" ? `STORY ${page.pageNumber}` : `故事 · ${pageWords[page.pageNumber - 1] || page.pageNumber}`;
+  const palettes = [
+    { accent: "#e8b83f", deep: "#245948", soft: "#fff1c7" },
+    { accent: "#cf6954", deep: "#3f5f78", soft: "#fae8e2" },
+    { accent: "#7387bd", deep: "#57466f", soft: "#ece9f7" },
+    { accent: "#58a07a", deep: "#5a4933", soft: "#e5f1e8" }
+  ];
+  const palette = palettes[(page.pageNumber - 1) % palettes.length];
+  const overlay = Buffer.from(`
     <svg xmlns="http://www.w3.org/2000/svg" width="${pageWidth}" height="${pageHeight}" viewBox="0 0 ${pageWidth} ${pageHeight}">
-      <rect width="${pageWidth}" height="${pageHeight}" fill="#fffdf7"/>
-      <rect x="35" y="42" width="970" height="1156" rx="26" fill="#fffaf0" stroke="#eadcc4" stroke-width="3"/>
-      <rect x="1008" width="12" height="${pageHeight}" fill="#ead8ba"/>
-      <text x="${copyX}" y="112" fill="#4f9f68" font-family="${fontFamily}" font-size="28" font-weight="800">${
-        (book.language || "zh") === "en" ? `Page ${page.pageNumber}` : `第 ${page.pageNumber} 页`
-      }</text>
-      ${svgText(titleLines, { x: copyX, y: titleY, size: 52, lineHeight: 62, color: "#243d36", weight: 800 })}
-      ${svgText(storyLines, { x: copyX, y: storyY, size: 27, lineHeight: 42, color: "#38524a", weight: 560 })}
-      <rect x="${copyX - 18}" y="${cultureY - 55}" width="620" height="${cultureHeight}" rx="22" fill="#fff7dc" stroke="#efcf78" stroke-width="3"/>
-      <text x="${copyX + 8}" y="${cultureY - 12}" fill="#8c5c1f" font-family="${fontFamily}" font-size="25" font-weight="800">${escapeXml(cultureLabel)}</text>
-      ${svgText(cultureLines, { x: copyX + 8, y: cultureY + 32, size: 22, lineHeight: 35, color: "#6b4d21", weight: 520 })}
-      <text x="${copyX}" y="1178" fill="#8a958f" font-family="${fontFamily}" font-size="22" font-weight="600">${escapeXml(book.title)}</text>
-      <circle cx="1650" cy="1165" r="30" fill="#f2bf45"/>
-      <text x="1650" y="1175" text-anchor="middle" fill="#243d36" font-family="${fontFamily}" font-size="24" font-weight="800">${page.pageNumber}</text>
+      <defs>
+        <linearGradient id="paperFade" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#fffaf0" stop-opacity="0"/>
+          <stop offset="0.5" stop-color="#fffaf0" stop-opacity="0.04"/>
+          <stop offset="0.64" stop-color="#fffaf0" stop-opacity="0.82"/>
+          <stop offset="0.76" stop-color="#fffaf0" stop-opacity="0.97"/>
+          <stop offset="1" stop-color="#fffaf0" stop-opacity="0.99"/>
+        </linearGradient>
+        <linearGradient id="bottomVeil" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0.72" stop-color="#163a31" stop-opacity="0"/>
+          <stop offset="1" stop-color="#163a31" stop-opacity="0.32"/>
+        </linearGradient>
+        <pattern id="paperDots" width="28" height="28" patternUnits="userSpaceOnUse">
+          <circle cx="2" cy="2" r="1.2" fill="${palette.deep}" fill-opacity="0.08"/>
+        </pattern>
+      </defs>
+      <rect width="${pageWidth}" height="${pageHeight}" fill="url(#paperFade)"/>
+      <rect x="1000" width="754" height="${pageHeight}" fill="url(#paperDots)"/>
+      <rect width="${pageWidth}" height="${pageHeight}" fill="url(#bottomVeil)"/>
+
+      <path d="M${copyX} 105 l13 -13 l13 13 l-13 13 z" fill="${palette.accent}"/>
+      <text x="${copyX + 39}" y="116" fill="${palette.deep}" font-family="${fontFamily}" font-size="23" font-weight="780" letter-spacing="3">${escapeXml(pageMarker)}</text>
+      <line x1="${copyX}" y1="151" x2="1648" y2="151" stroke="${palette.deep}" stroke-opacity="0.18" stroke-width="2"/>
+
+      ${svgText(titleLines, { x: copyX, y: titleY, size: 50, lineHeight: 64, color: palette.deep, weight: 820 })}
+      ${svgText(storyLines, { x: copyX, y: storyY, size: storyFontSize, lineHeight: storyLineHeight, color: "#304a42", weight: 560 })}
+
+      <rect x="${copyX - 18}" y="${cultureY}" width="576" height="${cultureHeight}" rx="24" fill="${palette.soft}" fill-opacity="0.94"/>
+      <rect x="${copyX - 18}" y="${cultureY}" width="9" height="${cultureHeight}" rx="5" fill="${palette.accent}"/>
+      <text x="${copyX + 14}" y="${cultureY + 43}" fill="${palette.deep}" font-family="${fontFamily}" font-size="23" font-weight="800" letter-spacing="1">${escapeXml(cultureLabel)}</text>
+      <line x1="${copyX + 14}" y1="${cultureY + 59}" x2="${copyX + 530}" y2="${cultureY + 59}" stroke="${palette.deep}" stroke-opacity="0.18" stroke-width="2"/>
+      ${svgText(cultureLines, { x: copyX + 14, y: cultureY + 91, size: 21, lineHeight: 33, color: "#5d503e", weight: 520 })}
+
+      <text x="${copyX}" y="1162" fill="${palette.deep}" fill-opacity="0.65" font-family="${fontFamily}" font-size="20" font-weight="650">${escapeXml(book.title)}</text>
+      <circle cx="1650" cy="1148" r="35" fill="${palette.accent}"/>
+      <text x="1650" y="1158" text-anchor="middle" fill="#fffaf0" font-family="${fontFamily}" font-size="24" font-weight="850">${String(page.pageNumber).padStart(2, "0")}</text>
     </svg>
   `);
 
-  return sharp(background)
-    .composite([{ input: storyImage, left: imageLeft, top: imageTop }])
+  return sharp(backdrop)
+    .composite([
+      { input: storyImage, left: 0, top: 0 },
+      { input: overlay, left: 0, top: 0 }
+    ])
     .jpeg({ quality: 90, chromaSubsampling: "4:4:4" })
     .toBuffer();
 }
